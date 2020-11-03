@@ -1,0 +1,365 @@
+# Importing Libraries
+import pandas as pd 
+from pandas import DataFrame
+import matplotlib
+%matplotlib inline 
+from matplotlib import pyplot as plt
+import seaborn as sns 
+
+# Dataframe for Graph 1
+df_graph1 = pd.read_csv('group11_value_1bed.csv')
+df_graph1.head()
+
+# Santa Clara County Data 
+sc_county = df_graph1[df_graph1.RegionName == 'Santa Clara County']
+sc_county
+
+# Los Angeles County Data 
+la_county = df_graph1[df_graph1.RegionName == 'Los Angeles County']
+la_county 
+
+# Cuyahoga County Data 
+c_county = df_graph1[df_graph1.RegionName == 'Cuyahoga County']
+c_county
+
+# King County Data
+k_county = df_graph1[df_graph1.RegionName == 'King County']
+k_county
+
+# Tarrant County Data 
+t_county = df_graph1[df_graph1.RegionName == 'Tarrant County']
+t_county
+
+### Creating a new Dataframe with the information found above:
+
+# Gathering information into a new Dataframe
+new_df_1 = df_graph1.iloc[[12, 0, 21, 10, 11], :]
+new_df_1
+
+# Renaming a Column
+new_df_2 = new_df_1.rename(columns = {'2019-04':'april2019'})
+
+# Checking
+new_df_2['april2019']
+
+# Plotting Graph 1
+graph_1 = sns.barplot(x = new_df_2.RegionName, y = new_df_2.april2019)
+
+# Creating function for wisting labels for fitting
+def twist(graph):
+    """Twist labels to 40 degrees angle"""
+    graph.set_xticklabels(graph.get_xticklabels(), rotation = 40, ha = 'right')
+    plt.tight_layout()
+    plt.show()
+twist(graph_1)
+
+# Saving Graph 1
+fig = graph_1.get_figure()
+fig.savefig('group11_graph1.png', bbox_inches = 'tight')
+
+### GRAPH 2 - Houses Sold per County
+
+Purpose: show how many houses were sold in different counties in 06/2008, 06/2009 (immediately after recession) , 06/2013 (5 years after 2008’s recession) and in 06/2018 (10 years after recession) - this graph will mainly show the impact of 2008 economic crisis in the Real Estate Market. 
+
+# Dataframe for Graph 2
+soldhomes = pd.read_csv('group11_homes_sold.csv')
+
+# Checking
+soldhomes.head()
+
+# Looking for Santa Clara information
+santaclara1 = soldhomes[soldhomes.RegionName == 'Santa Clara County']
+santaclara1
+
+##### Building new dataframes, so that the relevant data is easily accessable.
+
+# New Dataframe
+santaclara_crash = {'Year': ['2008-06', '2009-06', '2011-06', '2013-06', '2018-06'],
+                    'Sold': [1344, 1707, 1609, 1706, 1703]}
+df = DataFrame(santaclara_crash, columns = ['Year', 'Sold'])
+print(df)
+
+##### Visualizing the data so far.
+
+# Plotting Graph 2.1
+graph_21 = sns.pointplot(x = df.Year, y = df.Sold, color = 'green')
+
+# Twisting Labels for fitting
+twist(graph_21)
+
+# Saving Graph 2.1
+fig = graph_21.get_figure()
+fig.savefig('group11_graph21.png', bbox_inches = 'tight')
+
+##### Looking at Los Angeles county, California
+
+# Los Angeles County
+Los_angeles_crash = {'Year': ['2008-06', '2009-06', '2011-06', '2013-06', '2018-06'],
+                    'Sold': [5524, 7483, 6868, 7595, 8390]}
+df1 = DataFrame(Los_angeles_crash, columns = ['Year', 'Sold'])
+print(df1)
+
+# Plotting Graph 2.2
+graph_22 = sns.pointplot(x = df1.Year, y = df1.Sold, color = 'orange')
+
+# Twisting Labels for fitting
+twist(graph_22)
+
+# Saving Graph 2.2
+fig = graph_22.get_figure()
+fig.savefig('group11_graph22.png', bbox_inches = 'tight')
+
+##### Looking at Dallas county, Texas
+
+# Dallas County
+Dallas_crash = {"Year": ['2008-06', '2009-06', '2011-06', '2013-06', '2018-06'],
+                    'Sold': [2552, 1847, 2197, 2486, 3074]}
+df2 = DataFrame(Dallas_crash, columns = ['Year', 'Sold'])
+print(df2)
+
+# Plotting Graph 2.3
+graph_23 = sns.pointplot(x = df2.Year, y = df2.Sold)
+
+# Twisting Labels for fitting
+twist(graph_23)
+
+# Saving Graph 2.3
+fig = graph_23.get_figure()
+fig.savefig('group11_graph23.png', bbox_inches = 'tight')
+
+##### Looking at Denver county, Colorado
+
+# Denver County
+Denver_crash = {'Year': ['2008-06', '2009-06', '2011-06', '2013-06', '2018-06'],
+                    'Sold': [1277, 1183, 1037, 1465, 1531]}
+df3 = DataFrame(Denver_crash, columns = ['Year', 'Sold'])
+print(df3)
+
+# Plotting Graph 2.4
+graph_24 = sns.pointplot(x = df3.Year, y = df3.Sold, color = 'purple')
+
+# Twisting Labels for fitting
+twist(graph_24)
+
+# Saving Graph 2.4
+fig = graph_24.get_figure()
+fig.savefig('group11_graph24.png', bbox_inches = 'tight')
+
+##### Putting everything together into one dataframe and graph.
+
+# Putting everything together
+counties = ['Santa Clara County', 'Santa Clara County', 'Santa Clara County', 'Santa Clara County',
+            'Santa Clara County', 'Los Angeles County', 'Los Angeles County', 'Los Angeles County',
+            'Los Angeles County',  'Los Angeles County', 'Dallas County', 'Dallas County', 'Dallas County',
+            'Dallas County', 'Dallas County', 'Denver County', 'Denver County', 'Denver County', 'Denver County',
+           'Denver County']
+dfs = [df, df1, df2, df3]
+
+# Concatenating dataframes
+result = pd.concat(dfs)
+
+result['County'] = counties
+result
+
+# Graph with all analyzed counties
+graph_2 = sns.pointplot(x = result.Year, y = result.Sold, hue = result.County)
+
+# Saving Graph 2
+fig = graph_2.get_figure()
+fig.savefig('group11_graph2.png', bbox_inches = 'tight')
+
+### GRAPH 3 - RENTAL LISTINGS  
+
+Purpose: show the increase of the rent for different types of accommodation - Studio, 1 Bedroom, 2 Bedrooms and 3 Bedrooms houses.
+
+# Santa Clara Rental Studio Data 
+sc_studio = pd.read_csv('group11_rental_studio.csv')
+sc_studio_col = sc_studio[sc_studio.RegionName == 'Santa Clara County'] 
+sc_studio_col
+
+# Santa Clara 1 Bedroom Data 
+sc_1bed = pd.read_csv('group11_rental_1bed.csv')
+sc_1bed_col = sc_1bed[sc_1bed.RegionName == 'Santa Clara County']
+sc_1bed_col
+
+# Santa Clara 2 Bedrooms Data 
+sc_2bed = pd.read_csv('group11_rental_2bed.csv')
+sc_2bed_col = sc_2bed[sc_2bed.RegionName == 'Santa Clara County']
+sc_2bed_col
+
+# Santa Clara 3 Bedrooms Data 
+sc_3bed = pd.read_csv('group11_rental_3bed.csv')
+sc_3bed_col = sc_3bed[sc_3bed.RegionName == 'Santa Clara County']
+sc_3bed_col
+
+# New Concatenated DataFrame 
+df_types = pd.concat([sc_studio_col, sc_1bed_col, sc_2bed_col, sc_3bed_col], ignore_index = True, sort = False)
+df_types
+
+##### Here we are adding new columns with the same values as the respective original date column. The goal is to elimate the "-" symbol of the column name:
+
+# Adding Columns with nice names
+n = 2013
+while n < 2019:
+    df_types['Sept' + str(n)] = df_types.loc[: , [str(n) + '-09']]
+    n += 1 
+df_types['Mar2019'] = df_types.loc[: , ['2019-03']]
+
+# Checking March 2019
+print(df_types.Mar2019)
+
+# Checking columns
+df_types.columns
+
+##### Four dataframes were used to get the relevant data and now we need to put the information into a new dataframe:
+
+# Viewing Relevant Data & Adding new column to specify size of room
+new_df_rel = df_types[['Sept2013', 'Sept2014', 'Sept2015',
+       'Sept2016', 'Sept2017', 'Sept2018', 'Mar2019']]
+size = ['studio', '1bed', '2bed', '3bed'] 
+new_df_rel['size'] = size
+new_df_rel
+
+##### Dataframe needs to be transformed into long format for analysis:
+
+# Wide to Long format 
+new_df_long = pd.melt(new_df_rel, id_vars = 'size', var_name = 'date', value_name = 'price')
+new_df_long
+
+# Plotting Graph 3'
+graph_3 = sns.pointplot(x = 'date', y = 'price', hue = 'size', data = new_df_long, 
+                        order = ['Sept2013', 'Sept2014', 'Sept2015', 'Sept2016', 'Sept2017', 
+                                 'Sept2018', 'Mar2019'])
+# Twisting Labels for fitting
+twist(graph_3)
+
+# Saving Graph 3
+fig = graph_3.get_figure()
+fig.savefig('group11_graph3.png', bbox_inches = 'tight')
+
+### GRAPH 4 - PRICE-TO-RENT RATIO 
+Purpose: make a comparison between Santa Clara County and other counties in the United States.
+
+Important - What price-to-rental ratio means:   
+The price-to-rent ratio shows whether buying or renting would be best for a particular property in a given market.   
+- Price to rent ratio of 1 to 15 = typically better to buy than rent;  
+- Price to rent ratio of 16 to 20 = getting in to risky buy territory;  
+- Price to rent ratio of 21 or more = much better to rent than buy.
+
+# Dataframe for Graph 4
+ratio = pd.read_csv('group11_price_rent_ratio.csv', encoding = 'ISO-8859-1')
+
+# Checking
+ratio.head()
+
+# Santa Clara County, CA
+sc_ratio = ratio[ratio.RegionName == 'Santa Clara County']
+sc_ratio
+
+# Los Angeles County, CA
+la_ratio = ratio[ratio.RegionName == 'Los Angeles County']
+la_ratio
+
+# Denver County,CO
+de_ratio = ratio[ratio.RegionName == 'Denver County']
+de_ratio
+
+# Dallas County,TX
+da_ratio = ratio[ratio.RegionName == 'Dallas County']
+
+# Choosing the right county
+da_ratio1 = da_ratio[da_ratio.State == 'TX']
+da_ratio1
+
+# Concatenating dataframes
+conc_ratio = pd.concat([sc_ratio, la_ratio, de_ratio, da_ratio1], ignore_index = True, sort = False)
+conc_ratio
+
+# Renaming relevant column
+conc_ratio = conc_ratio.rename(columns = {'2019-03':'nineteen_march'})
+
+# Plotting Graph 4
+ratio_graph = sns.barplot(x = conc_ratio.RegionName, y = conc_ratio.nineteen_march)
+
+# Twisting labels for fitting
+twist(ratio_graph)
+
+# Saving Graph 4
+fig = ratio_graph.get_figure()
+fig.savefig('group11_graph4.png', bbox_inches = 'tight')
+
+### GRAPH 5 - RENT FORECAST
+
+Purpose: make a comparison between the city of San Jose, CA, the national rent forecast, the city with the lowest rent forecast and the city with the highest rent forecast.
+
+Important - Methodology used by Zillow: https://www.zillow.com/research/zillow-home-v
+
+# Dataframe for Graph 5
+df_graph5 = pd.read_csv('group11_rent_forecast.csv')
+df_graph5.head()
+
+# City with the lowest rent forecast
+lower_rent = df_graph5[df_graph5.ZriForecast == min(df_graph5.ZriForecast)]
+lower_rent
+
+# City with the highest rent forecast
+highest_rent = df_graph5[df_graph5.ZriForecast == max(df_graph5.ZriForecast)]
+highest_rent
+
+##### Note: San Jose is actually the city with the highest rent forecast, so the city of San Francisco was chosen, as well , for comparison purposes.
+
+# Forecast for San Francisco
+sanf_forecast = df_graph5[df_graph5.RegionName == 'San Francisco, CA']
+sanf_forecast
+
+# US forecast, highest and lowest forecast, SF forecast
+my_df = df_graph5.iloc[[0, 11, 34, 42], :]
+my_df
+
+# Plotting Graph 5
+graph_5 = sns.barplot(x = my_df.RegionName, y = my_df.ZriForecast)
+
+# Saving Graph 5
+fig = graph_5.get_figure()
+fig.savefig('group11_graph5.png', bbox_inches = 'tight')
+
+### WORD CLOUD - HIGHEST RENTAL PRICES IN THE WORLD
+
+Purpose: Make a comparison between the 50 highest rental prices in the world and show it as a Word Cloud. The highest the rent, the bigger the city will be displayed.
+
+# Importing libraries and modules
+from wordcloud import WordCloud
+from PIL import Image
+
+# Creating Dataframe for Word Cloud
+countries = pd.read_csv('group11_cloud.csv')
+countries.head()
+
+A dictionary will be used for associating the name of the city with the value of its rental price. For better visualization, just the main name of the cities will be displayed. 
+
+# Initializing a dictionary
+values = {}
+# Iterating through values in "City" and "Rent" columns
+for n in range(453):
+    full_name = countries.City[n]
+    city = full_name.split(sep = ',')
+    city_name = city[0]
+    values[city_name] = countries.Rent[n]
+
+There are keys with the same name in this dictionary, so just the cities with the highest rents will be maintened:
+
+# Values in dictionary are for San Jose, CA and London, UK
+# "San Jose" in Costa Rica and "London" in Canada were excluded 
+values['San Jose'] = 2560.66
+values['London'] = 2230.72
+values
+
+# Word Cloud based on key:values in the dictionary
+wc = WordCloud(background_color = 'white', width = 4000, height = 2000, 
+               max_words = 50, relative_scaling = 0.5, normalize_plurals = False).generate_from_frequencies(values)
+plt.imshow(wc)
+
+# Saving Word Cloud
+wc.to_file('wordcloud_6.png')
+
+## THE END.
