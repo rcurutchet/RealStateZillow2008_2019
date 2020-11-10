@@ -8,6 +8,6 @@ Data Source: For this analysis we used data provided by Zillow API and Numbeo.
 
 Purpose: To use Python language to analyze and shape data, so it can be analyzed and presented.
 
-Python tools used: Data frames, Data Visualization, Iteration/Conditional Execution (for/while), Function and Dictionaries.
+Python tools used: Data frames, Data Visualization, Iteration/Conditional Execution (for/while), Functions and Dictionaries.
 
 Libraries: Pandas, Matplotlib, Pillow, Seaborn and wordcloud.
